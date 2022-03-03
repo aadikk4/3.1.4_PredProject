@@ -1,12 +1,69 @@
 package com.example31._PredProject.service;
 
+import com.example31._PredProject.model.Role;
 import com.example31._PredProject.model.User;
-import java.util.List;
+import com.example31._PredProject.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface UserService {
-    List<User> show();
-    User getUserById(long id);
-    void addUser(User user);
-    void removeUser(long id);
-    void updateUser(User user);
+import java.util.Collections;
+
+@Service
+public class UserService implements UserDetailsService {
+
+    private PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public void setPasswordEncoder(@Lazy PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User '%s' not found", username));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                user.getPassword(), user.getRoles());
+    }
+
+    public Iterable<User> allUsers() {
+        return userRepository.findAll();
+    }
+
+    public User findUserById(long id) {
+        return userRepository.findById(id).get();
+    }
+
+    public void deleteById(long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void save(User user) {
+        user.setRoles(Collections.singleton(new Role(2L,"ROLE_USER")));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+    public void update(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 }

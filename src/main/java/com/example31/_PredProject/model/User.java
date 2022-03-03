@@ -1,69 +1,81 @@
 package com.example31._PredProject.model;
 
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
-@Table(name = "persons")
-public class User {
+@Data
+@Table(name = "users")
+public class User implements UserDetails {
+
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long  id;
+    private Long id;
+
+    @Column(unique = true)
+    private String username;
+
+    private String password;
+
     @Column(name = "name")
-    private String name;
-    @Column(name = "lastname")
-    private String lastname;
-    @Column(name = "age")
-    private int age;
+    private String firstName;
 
-    public User() {}
+    @Column(name = "last_name")
+    private String lastName;
 
-    public User(long  id, String name, String lastname, int  year) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.age = year;
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
+
+
+    public User() {
     }
 
-    public long  getId() {
-        return id;
-    }
-
-    public void setId(long  id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastname;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastname = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int year) {
-        this.age = year;
+    public User(String username, String password, String firstName, String lastName) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastname + '\'' +
-                ", year=" + age +
-                '}';
+        return "id=" + id +
+                ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'';
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

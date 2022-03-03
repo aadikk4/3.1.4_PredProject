@@ -12,27 +12,17 @@
         <th>Id</th>
         <th>Имя</th>
         <th>Фамилия</th>
-        <th>Возраст</th>
+        <th>Логин</th>
     </tr>
 
-        <td th:utext="${user.id}">UserId</a></td>
-        <td th:utext="${user.name}">Name</td>
-        <td th:utext="${user.lastName}">Lastname</td>
-        <td th:utext="${user.age}">Age</td>
+    <td th:utext="${user.id}">UserId</a></td>
+    <td th:utext="${user.firstName}">firstName</td>
+    <td th:utext="${user.lastName}">lastName</td>
+    <td th:utext="${user.username}">username</td>
     </tr>
     </tr>
 </table>
-<tr>
-    <form th:action="@{/{id}/edit(id=${user.id})}"/>
-    <input type="submit" class="buttonEdit" value="Изменить пользователя"/>
-    </form>
-</tr>
-
-<tr>
-    <form th:method="DELETE" th:action="@{/{id}(id=${user.id})}"/>
-    <input type="submit" class="buttonEdit" value="Удалить пользователя"/>
-    </form>
-</tr>
+<p><a th:href="@{/logout}">Logout</a></p>
 
 </body>
 

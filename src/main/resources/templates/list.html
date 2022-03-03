@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body>
+<h1>Пользователи</h1>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Логин</th>
+        <th>Редактиирование пользователя</th>
+
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.firstName}"></td>
+        <td th:text="${user.lastName}"></td>
+        <td><a th:href="@{/user/{name}(name= ${user.username})}" th:utext="${user.username}">UserId</a></td>
+        <td><form th:action="@{/admin/edit/{id}(id=${user.id})}"/>
+            <input type="submit" class="buttonEdit" value="Изменить пользователя"/>
+            </form>
+            <form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${user.id})}"/>
+            <input type="submit" class="buttonEdit" value="Удалить пользователя"/>
+            </form></td>
+
+
+
+
+    </tr>
+</table>
+<tr>
+    <form th:action="@{'/admin/new'}">
+        <input type="submit" class="buttonEdit" value="Добавить пользователя"/>
+    </form>
+</tr>
+<p><a th:href="@{/logout}">Logout</a></p>
+</body>
+</html>
