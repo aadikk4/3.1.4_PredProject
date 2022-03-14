@@ -1,6 +1,7 @@
 package com.example31._PredProject.service;
 
-import com.example31._PredProject.model.Role;
+
+
 import com.example31._PredProject.model.User;
 import com.example31._PredProject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    private PasswordEncoder passwordEncoder;
-
+    private  PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     @Autowired
@@ -58,11 +57,6 @@ public class UserService implements UserDetailsService {
     }
 
     public void save(User user) {
-        user.setRoles(Collections.singleton(new Role(2L,"ROLE_USER")));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
-    public void update(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
