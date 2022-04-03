@@ -59,15 +59,7 @@
                                     <th scope="col">Role</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <td th:text="${user.id}"></td>
-                                <td th:text="${user.firstName}"></td>
-                                <td th:text="${user.lastName}"></td>
-                                <td th:text="${user.age}"></td>
-                                <td th:text="${user.username}"></td>
-                                <td><a th:each="role : ${user.getRoles}" th:text="${role.name} + ' '"></a></td>
-                                <td>
-                                </tbody>
+                                <tbody id="user_info"></tbody>
                             </table>
                         </div>
                     </div>
@@ -76,6 +68,8 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="/static/script.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
