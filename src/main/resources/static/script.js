@@ -385,10 +385,16 @@ function showUserInfo(user) {
 showHeader();
 
 function showHeader() {
-    fetch('http://localhost:8080/api/userau')
+    fetch('http://localhost:8080/api/user')
         .then(response => response.json())
         .then(user => {
-            document.getElementById("header_email").innerHTML = user.username;
-            document.getElementById("header_roles").innerHTML = user.roles.map(role => role.role === 'ROLE_USER' ? 'USER' : 'ADMIN');
+            document.getElementById("header_email").innerHTML = user.username ;
+            let rolesList = document.createElement('ul');
+            for (let i = 0; i < user.roles.length; i++) {
+                let role = document.createElement('li');
+                role.textContent = user.roles[i].name + " ";
+                rolesList.appendChild(role);
+            }
+            document.getElementById("header_roles").innerHTML =  "with roles " +  rolesList.textContent;
         });
 };
